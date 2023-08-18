@@ -26,10 +26,10 @@ class MyTheme {
     primaryColor: splash,
     scaffoldBackgroundColor: Colors.white,
     textTheme: TextTheme(
-      titleMedium:
-          TextStyle(color: Colors.white.withOpacity(0.7), inherit: true),
+      subtitle1: TextStyle(color: Colors.white.withOpacity(0.7), inherit: true),
     ),
     brightness: Brightness.light,
+    backgroundColor: Colors.white,
     fontFamily: 'Poppins',
     buttonTheme: const ButtonThemeData(
       colorScheme: ColorScheme.light(
@@ -40,12 +40,6 @@ class MyTheme {
     appBarTheme: const AppBarTheme(
       color: appBarColor,
     ),
-    colorScheme: const ColorScheme.light(
-      // Use ColorScheme.light() for consistency
-      primary: splash,
-      background: Colors.white,
-      brightness: Brightness.light,
-    ),
   );
 
   static final myDarkTheme = ThemeData(
@@ -53,6 +47,7 @@ class MyTheme {
     scaffoldBackgroundColor: appBarColor,
     fontFamily: 'Poppins',
     brightness: Brightness.dark,
+    backgroundColor: appBarColor,
     buttonTheme: const ButtonThemeData(
       colorScheme: ColorScheme.dark(
         background: splash,
@@ -61,12 +56,6 @@ class MyTheme {
     ),
     appBarTheme: const AppBarTheme(
       color: appBarColor,
-    ),
-    colorScheme: const ColorScheme.dark(
-      // Use ColorScheme.light() for consistency
-      primary: splash,
-      background: Colors.black,
-      brightness: Brightness.dark,
     ),
   );
 }
