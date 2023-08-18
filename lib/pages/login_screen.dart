@@ -1,3 +1,4 @@
+import 'package:doonung/controllers/auth_controller.dart';
 import 'package:doonung/pages/signup_screen.dart';
 import 'package:doonung/utils/mytheme.dart';
 import 'package:doonung/utils/social_button.dart';
@@ -15,6 +16,10 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  final forgotEmailController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     final Size _size = MediaQuery.of(context).size;
@@ -80,6 +85,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   Padding(
                     padding: const EdgeInsets.only(top: 15),
                     child: TextFormField(
+                      controller: emailController,
+                      style: const TextStyle(color: Colors.black),
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5),
@@ -97,6 +104,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   Padding(
                     padding: const EdgeInsets.only(top: 15),
                     child: TextFormField(
+                      controller: passwordController,
+                      style: const TextStyle(color: Colors.black),
                       obscureText: true,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
@@ -117,33 +126,66 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: TextButton(
                       onPressed: () {
                         Get.defaultDialog(
-                          title: "Forgot Password ?",
+                          title: "Forgot Password?",
                           content: TextFormField(
+                            style: const TextStyle(color: Colors.black),
                             controller: forgotEmailController,
                             decoration: InputDecoration(
                               border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(
-                                  (5),
-                                  BorderSide: BorderSide.none,
-                                ),
+                                borderRadius: BorderRadius.circular(5),
+                                borderSide: BorderSide.none,
                               ),
-                              hintText: "Email Address",
+                              hintText: "Email address",
                               hintStyle: const TextStyle(color: Colors.black45),
                               fillColor: MyTheme.greyColor,
                               filled: true,
                             ),
                           ),
-                        radius: 10,
-                        onWillPop: () {
-                          forgotEmailController.text = "",
-                          
-                        }
+                          radius: 10,
+                          onWillPop: () {
+                            forgotEmailController.text = "";
+
+                            return Future.value(true);
+                          },
+                          contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 10),
+                          confirm: ElevatedButton(
+                            onPressed: () {
+                              AuthController.instance.forgorPassword(
+                                  forgotEmailController.text.trim());
+                              forgotEmailController.text = "";
+                              Get.back();
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: MyTheme.splash,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                            ),
+                            child: const Center(
+                              child: Padding(
+                                padding: EdgeInsets.all(12),
+                                child: Text(
+                                  "Send Reset Mail",
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                              ),
+                            ),
+                          ),
                         );
                       },
+                      child: const Text(
+                        "Forgot Password?",
+                        style: TextStyle(
+                            color: Colors.black54, fontWeight: FontWeight.w600),
+                      ),
                     ),
                   ),
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      AuthController.instance.login(emailController.text.trim(),
+                          passwordController.text.trim());
+                    },
                     style: ElevatedButton.styleFrom(
                         backgroundColor: MyTheme.splash,
                         shape: RoundedRectangleBorder(
@@ -191,7 +233,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       bottom: 15,
                     ),
                     child: SocialLoginButton(
-                      onGoogleClick: () {},
+                      onGoogleClick: () {
+                        AuthController.instance.googleLogin();
+                      },
                       onFbClick: () {},
                     ),
                   )
@@ -215,12 +259,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //     builder: (_) => const SignUpScreen(),
-                        //   ),
-                        // );
                         Get.to(SignUpScreen());
                       },
                   ),

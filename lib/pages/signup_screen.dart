@@ -1,4 +1,5 @@
 import 'package:doonung/controllers/auth_controller.dart';
+import 'package:doonung/controllers/input_validtors.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -69,6 +70,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   Padding(
                     padding: const EdgeInsets.only(top: 15),
                     child: TextFormField(
+                      style: const TextStyle(color: Colors.black),
                       controller: nameController,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
@@ -87,8 +89,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   Padding(
                     padding: const EdgeInsets.only(top: 15),
                     child: TextFormField(
+                      style: const TextStyle(color: Colors.black),
                       controller: emailController,
-                      obscureText: true,
+                      // obscureText: true,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5),
@@ -106,6 +109,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   Padding(
                     padding: const EdgeInsets.only(top: 15),
                     child: TextFormField(
+                      style: const TextStyle(color: Colors.black),
                       controller: passwordController,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
@@ -124,6 +128,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   Padding(
                     padding: const EdgeInsets.only(top: 15, bottom: 10),
                     child: TextFormField(
+                      style: const TextStyle(color: Colors.black),
                       controller: cnfPasswordController,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
@@ -141,10 +146,25 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      AuthController.instance.registerUser(
-                        emailController.text.trim(),
-                        passwordController.text.trim(),
-                      );
+                      if (InputValidator.validateField(
+                              "Name", nameController.text.trim()) &&
+                          InputValidator.validateField(
+                              "Email", emailController.text.trim())) {
+                        if (InputValidator.validatePassword(
+                            passwordController.text,
+                            cnfPasswordController.text)) {
+                          AuthController.instance.registerUser(
+                              emailController.text.trim(),
+                              passwordController.text.trim());
+                        }
+                      }
+
+                      {
+                        AuthController.instance.registerUser(
+                          emailController.text.trim(),
+                          passwordController.text.trim(),
+                        );
+                      }
                     },
                     style: ElevatedButton.styleFrom(
                         backgroundColor: MyTheme.splash,
